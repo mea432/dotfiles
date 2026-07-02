@@ -567,6 +567,13 @@ do
     --   },
     -- },
     -- pickers = {}
+    pickers = {
+      find_files = {
+        hidden = true,
+        file_ignore_patterns = { '%.git/' }
+      }
+    },
+
     extensions = {
       ['ui-select'] = { require('telescope.themes').get_dropdown() },
     },
