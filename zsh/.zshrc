@@ -59,6 +59,10 @@ alias kvim='NVIM_APPNAME=nvim-kickstart nvim'
 
 alias vim='NVIM_APPNAME=nvim-kickstart nvim'
 
+# Autocomplete for jj
+autoload -U compinit
+compinit
+source <(jj util completion zsh)
 
 # Open buffer line in editor
 export VISUAL=vim
@@ -70,5 +74,5 @@ zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
 
-# Fix ssh terminal stuff
+# Fix ssh terminal stuff acting weird for Ghostty
 alias ssh="env TERM=xterm-256color ssh"
