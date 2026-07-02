@@ -10,11 +10,10 @@ else
     {
       echo "$HOME/dotfiles"
 
-      echo "$HOME/Documents/Summer 2026 MGH Intership/lab-notebook"
-
       find "$HOME/Documents/Coding" \
-        "$HOME/Documents/research projects" \
         "$HOME/Documents" \
+        "$HOME/Documents/research projects" \
+        "$HOME/Documents/Summer 2026 MGH Intership" \
         -mindepth 1 -maxdepth 1 -type d
     } | fzf
   )
