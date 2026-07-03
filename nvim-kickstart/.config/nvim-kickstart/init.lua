@@ -103,7 +103,7 @@ do
   -- Set to true if you have a Nerd Font installed and selected in the terminal
   vim.g.have_nerd_font = true
 
-  vim.g.netrw_list_hide = '^\\.git,^\\.DS_Store$'
+  vim.g.netrw_list_hide = '^\\.git,^\\.DS_Store$,^\\.jj'
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -570,7 +570,7 @@ do
     pickers = {
       find_files = {
         hidden = true,
-        file_ignore_patterns = { '%.git/' }
+        file_ignore_patterns = { '%.git/', '%.jj/' }
       }
     },
 

@@ -45,7 +45,7 @@ if [[ "$selected" == "$NOTES_DIR" ]]; then
   cmd="selection=\$(find . -type f -name '*.md' | sed 's|^\./||; s/\.md$//' | fzf --bind 'ctrl-y:print-query' --print-query --header 'Select or Type New Note Path | Ctrl-y: Create New' | tail -1) && \
          if [[ -n \"\$selection\" ]]; then \
             mkdir -p \"\$(dirname \"\$selection\")\" && \
-            nvim \"\$selection.md\"; \
+            vim \"\$selection.md\"; \
          fi"
 
   # Check if the session is "busy" (running nvim, fzf, or something else)
