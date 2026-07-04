@@ -270,6 +270,12 @@ do
 
   -- [[ Basic Autocommands ]]
   --  See `:help lua-guide-autocommands`
+  
+  -- Auto reload buffer more frequently (for when version control chnages files)
+  vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    command = "checktime",
+  })
+
 
   -- Highlight when yanking (copying) text
   --  Try it with `yap` in normal mode
