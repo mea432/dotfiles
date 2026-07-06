@@ -577,7 +577,11 @@ do
       find_files = {
         hidden = true,
         file_ignore_patterns = { '%.git/', '%.jj/' }
-      }
+      },
+      live_grep = {
+        hidden = true,
+        file_ignore_patterns = { '%.git/', '%.jj/' }
+      },
     },
 
     extensions = {
