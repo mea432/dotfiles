@@ -277,7 +277,7 @@ A = 'LG HDR 4K'
   esc = ['mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
 
   a = ['exec-and-forget open /Applications/Safari.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
-  b = ['exec-and-forget open /Applications/Arc.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
+  b = ['exec-and-forget open /Applications/Zen.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   c = ['exec-and-forget open /System/Applications/Calendar.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   f = ['exec-and-forget open /System/Library/CoreServices/Finder.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   i = ['exec-and-forget open -b com.adobe.InDesign', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
