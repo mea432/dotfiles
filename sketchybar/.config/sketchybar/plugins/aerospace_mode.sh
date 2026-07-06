@@ -2,8 +2,17 @@
 
 CURRENT_MODE=$(aerospace list-modes --current)
 
-if [ "$CURRENT_MODE" = "main" ]; then
-  sketchybar --set "$NAME" drawing=off
-else
-  sketchybar --set "$NAME" drawing=on label="$CURRENT_MODE"
-fi
+case "$CURRENT_MODE" in
+  main)
+    sketchybar --set "$NAME" drawing=off
+    ;;
+  apps)
+    sketchybar --set "$NAME" drawing=on icon="󰀻" label="APPS"
+    ;;
+  service)
+    sketchybar --set "$NAME" drawing=on icon="󰒓" label="SERVICE"
+    ;;
+  *)
+    sketchybar --set "$NAME" drawing=on icon="󰘳" label="$(printf '%s' "$CURRENT_MODE" | tr '[:lower:]' '[:upper:]')"
+    ;;
+esac

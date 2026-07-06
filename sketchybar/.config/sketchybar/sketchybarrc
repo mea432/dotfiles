@@ -1,179 +1,231 @@
 #!/bin/bash
 
+# This is a demo config to showcase some of the most important commands.
+# It is meant to be changed and configured, as it is intentionally kept sparse.
+# For a (much) more advanced configuration example see my dotfiles:
+# https://github.com/FelixKratz/dotfiles
+
 source "$CONFIG_DIR/colors.sh"
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
+# Configuring the general appearance of the bar.
+# These are only some of the options available. For all options see:
+# https://felixkratz.github.io/SketchyBar/config/bar
+# If you are looking for other colors, see the color picker:
+# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=40 blur_radius=10 padding_left=8 padding_right=8 color=$BAR_COLOR
+sketchybar --bar position=top height=45 blur_radius=0 color=0x00ffffff
 
 ##### Changing Defaults #####
+# We now change some default values, which are applied to all further items.
+# For a full list of all available item properties see:
+# https://felixkratz.github.io/SketchyBar/config/items
 
 default=(
-  padding_left=5
-  padding_right=5
-  icon.font="Hack Nerd Font:Regular:15.0"
-  label.font="SF Pro:Semibold:15.0"
-  icon.color=$WHITE
-  label.color=$WHITE
-  icon.padding_left=10
-  icon.padding_right=0
-  label.padding_left=10
-  label.padding_right=10
-  background.color=$BACKGROUND_1
-  background.corner_radius=5
-  background.height=24
+    padding_left=5
+    padding_right=5
+    icon.font="Hack Nerd Font Mono:Bold:17.0"
+    label.font="JetBrains Mono:Bold:14.0"
+    icon.color=$WHITE
+    label.color=$WHITE
+    background.drawing=off
+    background.color=$ITEM_BG_COLOR
+    background.border_color=0xffffffff
+    background.height=24
+    background.corner_radius=5
+    icon.padding_left=8
+    icon.padding_right=8
+    label.padding_left=8
+    label.padding_right=8
 )
 sketchybar --default "${default[@]}"
 
-##### Left Items #####
-
-sketchybar --add item apple left \
-  --set apple icon= label.drawing=off icon.padding_right=10
-
 sketchybar --add event aerospace_workspace_change
+# sketchybar --add event aerospace_monitor_change
+sketchybar --add event aerospace_focus_change
 sketchybar --add event aerospace_mode_change
 sketchybar --add event input_change AppleSelectedInputSourcesChangedNotification
 
-# sketchybar --add item window_title left \
-#   --set window_title icon= label.font="SF Pro:Semibold:14.0" \
-#   icon.padding_left=0 \
-#   width=dynamic \
-#   script="$PLUGIN_DIR/aerospace_window_title.sh" \
-#   --subscribe window_title aerospace_workspace_change
+# Right Side Items
+# Calendar
+sketchybar --add item date right \
+    --set date \
+    update_freq=3600 \
+    script="$PLUGIN_DIR/date.sh" \
+    icon.drawing=off \
+    label.font="JetBrains Mono:Regular:9" \
+    label.padding_left=6 \
+    width=0 \
+    label.align=center \
+    background.drawing=off \
+    y_offset=6
 
-AEROSPACE_MONITORS=$(aerospace list-monitors --format '%{monitor-id}' 2>/dev/null)
-if [ -z "$AEROSPACE_MONITORS" ]; then
-  AEROSPACE_MONITORS="1"
-fi
+sketchybar --add item time right \
+    --set time \
+    update_freq=30 \
+    script="$PLUGIN_DIR/time.sh" \
+    icon.drawing=off \
+    label.font="JetBrains Mono:Bold:13" \
+    label.padding_left=6 \
+    width=0 \
+    label.align=center \
+    background.drawing=off \
+    y_offset=-4
+# Spacer
+sketchybar --add item spacer_right right \
+    --set spacer_right \
+    width=88 \
+    background.drawing=off \
+    label.drawing=off \
+    icon.drawing=off
+# Battery
+sketchybar --add item volume right \
+    --set volume \
+    script="$PLUGIN_DIR/volume.sh" \
+    background.drawing=off \
+    --subscribe volume volume_change system_woke \
 
-AEROSPACE_WORKSPACES=$(aerospace list-workspaces --all 2>/dev/null)
-if [ -z "$AEROSPACE_WORKSPACES" ]; then
-  AEROSPACE_WORKSPACES="1 2 3 4 5 6 7 8 9 A B C D E F G I M N O P Q R S T U V W X Y Z"
-fi
+sketchybar --add item battery right \
+    --set battery \
+    script="$PLUGIN_DIR/battery.sh" \
+    background.drawing=off \
+    icon.padding_right=4 \
+    update_freq=60
 
-for monitor_id in $AEROSPACE_MONITORS; do
-  for workspace in $AEROSPACE_WORKSPACES; do
-    workspace_item="aerospace_workspace.$monitor_id.$workspace"
-    sketchybar --add item "$workspace_item" left \
-      --set "$workspace_item" \
-      display="$monitor_id" \
-      icon="$workspace" \
-      icon.padding_left=7 \
-      icon.padding_right=7 \
-      label="*" \
-      label.padding_left=0 \
-      label.padding_right=7 \
-      label.drawing=off \
-      background.drawing=off \
-      click_script="aerospace workspace $workspace"
-  done
+# # cpu_usage
+# sketchybar --add item cpu_usage right \
+#     --set cpu_usage \
+#     script="$PLUGIN_DIR/cpu_usage.sh" \
+#     background.drawing=off \
+#     update_freq=5 \
+#     icon.padding_right=4 \
+#     icon="" \
+#     background.corner_radius=12 \
+#     icon.font="Hack Nerd Font Mono:Bold:20.0"
+# # SSD_usage
+# sketchybar --add item ssd_usage right \
+#     --set ssd_usage \
+#     script="$PLUGIN_DIR/ssd_usage.sh" \
+#     background.drawing=off \
+#     update_freq=60 \
+#     icon="" \
+#     icon.padding_right=4 \
+#     icon.font="Hack Nerd Font Mono:Bold:20.0"
+
+sketchybar --add item keyboard right \
+    --set keyboard \
+    icon.drawing=off \
+    background.drawing=off \
+    script="$PLUGIN_DIR/keyboard.sh" \
+    --subscribe keyboard input_change \
+
+
+# Bracket for right side items except for calender
+sketchybar --add bracket right_thingies keyboard battery volume \
+    --set right_thingies background.color=0x5e000000 \
+    background.drawing=on \
+    background.height=28 \
+    background.corner_radius=12
+
+#Bracket for calendar
+sketchybar --add bracket right_side date time \
+    --set right_side background.color=0x5e000000 \
+    background.drawing=on \
+    background.height=28 \
+    background.corner_radius=12
+
+
+
+
+
+
+# Left Side Items
+sketchybar --add item apple left \
+    --set apple \
+    icon="" \
+    icon.font="Hack Nerd Font Mono:Bold:25.0" \
+    background.drawing=off \
+    background.height=28 \
+    background.corner_radius=12 \
+    icon.padding_right=0 \
+    icon.color=0xffcba6f7
+
+# for sid in $(aerospace list-workspaces --all); do
+for sid in 1 2 3 4 5 6; do
+    sketchybar --add item space.$sid left \
+        --subscribe space.$sid aerospace_workspace_change \
+        --set space.$sid \
+        drawing=on \
+        label.drawing=on \
+        label.font="sketchybar-app-font:Regular:16.0" \
+        background.drawing=on \
+        background.color=0x00ffffff \
+        icon="$sid" \
+        icon.padding_left=10 \
+        label.padding_right=15 \
+        label.padding_left=0 \
+        label.y_offset=-1 \
+        click_script="aerospace workspace $sid" \
+        script="$PLUGIN_DIR/aerospace.sh $sid"
 done
 
-sketchybar --add item aerospace_workspaces_updater left \
-  --set aerospace_workspaces_updater \
-  drawing=off \
-  updates=on \
-  script="$PLUGIN_DIR/aerospace_workspaces.sh" \
-  --subscribe aerospace_workspaces_updater aerospace_workspace_change
+for mid in $(aerospace list-monitors | cut -c1); do
+    for sid in $(aerospace list-workspaces --monitor $mid --empty no); do
+        apps=$(aerospace list-windows --workspace "$sid" | awk -F'|' '{gsub(/^ *| *$/, "", $2); print $2}')
+
+        sketchybar --set space.$sid drawing=on
+
+        icon_strip=" "
+        if [ "${apps}" != "" ]; then
+            while read -r app; do
+                icon_strip+=" $($PLUGIN_DIR/icon_map_fn.sh "$app")"
+            done <<<"${apps}"
+        else
+            icon_strip=""
+        fi
+        sketchybar --set space.$sid label="$icon_strip"
+    done
+done
+
+sketchybar --add item icon_refresher left \
+    --set icon_refresher drawing=off \
+    width=0 \
+    script="$PLUGIN_DIR/icon_refresh.sh" \
+    --subscribe icon_refresher aerospace_focus_change aerospace_workspace_change
+
+sketchybar --add bracket left_bracket apple space.6 \
+    --set left_bracket background.color=0x5e000000 \
+    background.drawing=on \
+    background.height=28 \
+    background.corner_radius=12
 
 sketchybar --add item front_app left \
-  --set front_app icon.drawing=off script="$PLUGIN_DIR/front_app.sh" \
-  padding_right=0 \
-  --subscribe front_app front_app_switched
+    --set front_app icon.drawing=off \
+    label.font="Hack Nerd Font Mono:Bold:14" \
+    script="$PLUGIN_DIR/front_app.sh" \
+    background.drawing=on \
+    background.color=0x5e000000 \
+    background.height=28 \
+    background.corner_radius=12 \
+    background.padding_left=10 \
+    --subscribe front_app front_app_switched
 
 sketchybar --add item aerospace_mode left \
-  --subscribe aerospace_mode aerospace_mode_change \
-  --set aerospace_mode icon="󰪭" \
-  icon.font.size=20 \
-  icon.color=$RED \
-  label.color=$RED \
-  script="$PLUGIN_DIR/aerospace_mode.sh" \
-  \
-  icon.padding_left=4 \
-  icon.padding_right=0 \
-  \
-  background.drawing=on
-# icon.color=0xaa99ffcc # background.color=0x55ffeeaa \
+    --subscribe aerospace_mode aerospace_mode_change \
+    --set aerospace_mode \
+    script="$PLUGIN_DIR/aerospace_mode.sh" \
+    background.drawing=on \
+    background.color=0x5e000000 \
+    background.height=28 \
+    background.corner_radius=12 \
+    icon.font="Hack Nerd Font Mono:Bold:20.0" \
+    icon.color=0xffcba6f7 \
+    icon.padding_left=9 \
+    icon.padding_right=5 \
+    label.font="Hack Nerd Font Mono:Bold:14" \
+    label.color=0xffffffff \
+    label.padding_left=0 \
+    label.padding_right=10
 
-sketchybar --add item media left \
-  --set media icon="􀑪" \
-  script="$PLUGIN_DIR/media.sh" \
-  label.max_chars=40 \
-  update_freq=2 \
-  click_script="aerospace workspace M" \
-  background.drawing=off \
-  drawing=off \
-  --subscribe media mouse.entered
-
-##### Right Items #####
-
-sketchybar \
-  --add item clock right \
-  --set clock \
-  update_freq=60 \
-  icon.padding_left=0 \
-  script="$PLUGIN_DIR/clock.sh" \
-  padding_right=0 \
-  --subscribe clock system_woke \
-  \
-  --add item volume right \
-  --set volume \
-  script="$PLUGIN_DIR/volume.sh" \
-  --subscribe volume volume_change system_woke \
-  \
-  --add item battery right \
-  --set battery \
-  update_freq=120 \
-  script="$PLUGIN_DIR/battery.sh" \
-  --subscribe battery system_woke power_source_change \
-  \
-  --add item keyboard right \
-  --set keyboard \
-  icon.drawing=off \
-  script="$PLUGIN_DIR/keyboard.sh" \
-  --subscribe keyboard input_change \
-  \
-  --add item calendar right \
-  --set calendar \
-  update_freq=60 \
-  script="$PLUGIN_DIR/calendar.sh" \
-  icon.drawing=off \
-  background.drawing=on \
-  click_script="open -a 'Calendar'" \
-  icon=􀉉 \
-  --subscribe calendar system_woke
-
-# sketchybar --add item media_next right \
-#   --set media_next icon=􀊐 \
-#   label.drawing=off \
-#   click_script="nowplaying-cli next" \
-#   drawing=off \
-#   background.drawing=off \
-#   padding_left=0 \
-#   padding_right=0
-#
-# sketchybar --add item media_play_pause right \
-#   --set media_play_pause icon=􀊘 \
-#   label.drawing=off \
-#   click_script="nowplaying-cli togglePlayPause" \
-#   drawing=off \
-#   background.drawing=off \
-#   padding_left=0 \
-#   padding_right=0
-#
-# sketchybar --add item media_back right \
-#   --set media_back icon=􀊎 \
-#   label.drawing=off \
-#   click_script="nowplaying-cli previous" \
-#   drawing=off \
-#   background.drawing=off \
-#   padding_left=0 \
-#   padding_right=0
-
-##### Force all scripts to run the first time #####
 sketchybar --update
-
-FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused 2>/dev/null)
-sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$FOCUSED_WORKSPACE"
-sketchybar --trigger aerospace_mode_change
