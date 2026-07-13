@@ -103,7 +103,7 @@ do
   -- Set to true if you have a Nerd Font installed and selected in the terminal
   vim.g.have_nerd_font = true
 
-  vim.g.netrw_list_hide = '^\\.git,^\\.DS_Store$'
+  vim.g.netrw_list_hide = '^\\.git,^\\.DS_Store$,^\\.jj'
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -270,6 +270,12 @@ do
 
   -- [[ Basic Autocommands ]]
   --  See `:help lua-guide-autocommands`
+  
+  -- Auto reload buffer more frequently (for when version control chnages files)
+  vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+    command = "checktime",
+  })
+
 
   -- Highlight when yanking (copying) text
   --  Try it with `yap` in normal mode
@@ -570,8 +576,12 @@ do
     pickers = {
       find_files = {
         hidden = true,
-        file_ignore_patterns = { '%.git/' }
-      }
+        file_ignore_patterns = { '%.git/', '%.jj/' }
+      },
+      live_grep = {
+        hidden = true,
+        file_ignore_patterns = { '%.git/', '%.jj/' }
+      },
     },
 
     extensions = {

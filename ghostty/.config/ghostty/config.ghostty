@@ -19,7 +19,7 @@ font-size = 18
 background-opacity = 0.85
 background-blur-radius = 20
 
-custom-shader = shaders/cursor_shaders/cursor_tail.glsl
+# custom-shader = shaders/cursor_shaders/cursor_tail.glsl
 # custom-shader-animation = always
 
 mouse-hide-while-typing = true

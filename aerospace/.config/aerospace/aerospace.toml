@@ -26,7 +26,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 75
+accordion-padding = 150
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
@@ -42,7 +42,12 @@ default-root-container-orientation = 'auto'
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
 # Fallback value (if you omit the key): on-focused-monitor-changed = []
 on-focused-monitor-changed = ['move-mouse monitor-lazy-center'] # Mouse lazily follows focused monitor (default in i3)
-on-focus-changed = ['move-mouse window-lazy-center', 'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'] # Mouse follows focused window and also update sketchybar
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+]
+on-focus-changed = ['exec-and-forget sketchybar --trigger aerospace_focus_change'] # Mouse follows focused window and also update sketchybar
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -82,12 +87,12 @@ A = 'LG HDR 4K'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 10
-    inner.vertical =   10
-    outer.left =       5
-    outer.bottom =     5
-    outer.top = [ { monitor."built-in" = 5 }, 45 ]
-    outer.right =      5
+    inner.horizontal = 20
+    inner.vertical =   20
+    outer.left =       20
+    outer.bottom =     20
+    outer.top = [ { monitor."built-in" = 15 }, 60 ] # Sketchybar is 40 pixels tall
+    outer.right =      20
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -194,7 +199,6 @@ A = 'LG HDR 4K'
     ctrl-alt-cmd-shift-9 = 'move-node-to-workspace 9'
     ctrl-alt-cmd-shift-a = 'move-node-to-workspace A'
     ctrl-alt-cmd-shift-b = 'move-node-to-workspace B'
-    ctrl-alt-cmd-shift-c = 'move-node-to-workspace C'
     ctrl-alt-cmd-shift-d = 'move-node-to-workspace D'
     ctrl-alt-cmd-shift-e = 'move-node-to-workspace E'
     ctrl-alt-cmd-shift-f = 'move-node-to-workspace F'
@@ -266,7 +270,7 @@ A = 'LG HDR 4K'
     ctrl-alt-cmd-shift-l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
 
 
-    z = ['fullscreen', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change', 'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE']
+    z = ['fullscreen', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change'] #, 'exec-and-forget sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE']
 
     space = ['exec-and-forget nowplaying-cli togglePlayPause', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
     l = ['exec-and-forget nowplaying-cli next', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
@@ -277,7 +281,7 @@ A = 'LG HDR 4K'
   esc = ['mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
 
   a = ['exec-and-forget open /Applications/Safari.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
-  b = ['exec-and-forget open /Applications/Arc.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
+  b = ['exec-and-forget open /Applications/Zen.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   c = ['exec-and-forget open /System/Applications/Calendar.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   f = ['exec-and-forget open /System/Library/CoreServices/Finder.app', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
   i = ['exec-and-forget open -b com.adobe.InDesign', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change']
